@@ -1,0 +1,15 @@
+{
+  "latency_mean_ms": 18.106808999999995,
+  "latency_median_ms": 18.539350000001065,
+  "latency_p95_ms": 28.479785000000213,
+  "throughput_images_per_s": 3534.5819354476,
+  "gpu_mem_peak_mb": 494.81787109375,
+  "iters": 100,
+  "warmup": 20,
+  "batch_size": 64,
+  "task": "cls",
+  "arch": "resnet18",
+  "device": "cuda",
+  "img_h": 128,
+  "img_w": 256
+}

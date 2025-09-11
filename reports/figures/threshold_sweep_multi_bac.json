@@ -1,0 +1,32 @@
+[
+  {
+    "label": "UNet-CAM",
+    "metric": "bac",
+    "best_value": 0.9356254697000752,
+    "best_threshold": 0.047
+  },
+  {
+    "label": "UNet-MP",
+    "metric": "bac",
+    "best_value": 0.9667281546765047,
+    "best_threshold": 0.47700000000000004
+  },
+  {
+    "label": "UNet-Pseudo",
+    "metric": "bac",
+    "best_value": 0.9670014347202296,
+    "best_threshold": 0.438
+  },
+  {
+    "label": "ResNet18",
+    "metric": "bac",
+    "best_value": 0.9709298353487736,
+    "best_threshold": 0.20800000000000002
+  },
+  {
+    "label": "EffNetB0",
+    "metric": "bac",
+    "best_value": 0.9712031153924985,
+    "best_threshold": 0.304
+  }
+]
