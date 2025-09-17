@@ -146,7 +146,7 @@ def main(args):
     np.savez(os.path.join(args.out, "scores_val.npz"), y=yv, score=sv)
 
     # 2) Selecting the threshold on the validation set
-    t_star = find_threshold(yv, sv, how='bac')  # 可改 'f1' 看你论文偏好
+    t_star = find_threshold(yv, sv, how='bac')
 
     # 3) Evaluation on the test set
     tm, yt, st = eval_image_level(model, te, device)
