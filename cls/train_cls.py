@@ -70,12 +70,7 @@ def eval_metrics(model, loader, device):
     }, ys, ps
 
 def find_threshold(y, s, how='bac'):
-    """
-    在验证集上选阈值：
-    how='bac'：最大化 Balanced Accuracy（推荐）
-    how='f1' ：最大化 F1
-    how='youden'：最大化 TPR+TNR-1（Youden's J）
-    """
+  
     y = np.asarray(y).astype(int).ravel()
     s = np.asarray(s).astype(float).ravel()
     grid = np.linspace(0, 1, 1001)
@@ -158,12 +153,12 @@ def main(args):
         with open(os.path.join(args.out,"train_log.json"),"w") as f: f.write(json.dumps(log, indent=2))
 
     # Test
-    # 1) 验证集分数（用最优模型）
+    # 1) 验证集分数
     model.load_state_dict(torch.load(os.path.join(args.out, "best.pt"), map_location=device))
     vm, yv, sv = eval_metrics(model, vl, device)
     np.savez(os.path.join(args.out, "scores_val.npz"), y=yv, score=sv)
 
-    # 2) 选阈值（推荐 Balanced Accuracy）
+    # 2) 选阈值
     t_star = find_threshold(yv, sv, how='bac')
 
     # 3) 测试集 + 阈值化三指标
