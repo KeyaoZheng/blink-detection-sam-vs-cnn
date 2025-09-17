@@ -44,12 +44,7 @@ def eval_image_level(model, loader, device):
     }, ys, ps
 
 def find_threshold(y, s, how='bac'):
-    """
-    在验证集上选阈值：
-    how='bac'：最大化 Balanced Accuracy（推荐）
-    how='f1' ：最大化 F1
-    how='youden'：最大化 TPR+TNR-1（Youden's J）
-    """
+
     y = np.asarray(y).astype(int).ravel()
     s = np.asarray(s).astype(float).ravel()
     grid = np.linspace(0, 1, 1001)
@@ -138,24 +133,24 @@ def main(args):
             open(os.path.join(args.out,"best_val_metrics.json"),"w").write(json.dumps(best,indent=2))
         open(os.path.join(args.out,"train_log.json"),"w").write(json.dumps(log,indent=2))
     # test
-    # 1) 用最优模型重新在验证集跑一遍，落盘 val 分数
+    # 1) Run the best model again on the validation set and record the val score.
     model.load_state_dict(torch.load(os.path.join(args.out, "best.pt"), map_location=device))
     vm, yv, sv = eval_image_level(model, vl, device)
     np.savez(os.path.join(args.out, "scores_val.npz"), y=yv, score=sv)
 
-    # 2) 在验证集选阈值（推荐用 Balanced Accuracy）
+    # 2) Selecting the threshold on the validation set
     t_star = find_threshold(yv, sv, how='bac')  # 可改 'f1' 看你论文偏好
 
-    # 3) 在测试集评估（阈值固定为 t_star）
+    # 3) Evaluation on the test set
     tm, yt, st = eval_image_level(model, te, device)
     thr = eval_with_threshold(yt, st, t_star)
 
-    # 4) 合并阈值化后的三项指标，并保存
+    # 4) Merge the three thresholded indicators and save them.
     tm.update(thr)
     with open(os.path.join(args.out, "test_metrics.json"), "w") as f:
         f.write(json.dumps(tm, indent=2))
 
-    # 5) 继续保存原始分数（便于 PR/ROC）
+    # 5) Continue to save the original score.
     np.savez(os.path.join(args.out, "scores_test.npz"), y=yt, score=st)
     print("Test:", tm)
 
